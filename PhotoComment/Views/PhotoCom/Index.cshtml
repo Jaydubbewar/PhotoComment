@@ -1,0 +1,46 @@
+﻿@model PhotoCommentViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<div class="row">
+    @foreach (var item in Model.Photos)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="@item.ImageUrl" class="card-img-top" alt="Image">
+                <div class="card-body">
+                    <h5 class="card-title">@item.Title</h5>
+                    <p class="card-text">@item.Description</p>
+
+                    <!-- Display comments for this photo -->
+                    <ul>
+                        @foreach (var comment in Model.Comments.Where(c => c.PhotoId == item.Id))
+                        {
+                            <li>@comment.Text</li>
+                        }
+                    </ul>
+
+                    <div class="text-center">                      
+
+                        <!-- Form to add a comment -->
+                        <form method="post" action="/PhotoCom/AddComment">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="commentText" placeholder="Add a comment" />
+                            </div>
+                            <button type="submit" class="btn btn-secondary">Save Comment</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
